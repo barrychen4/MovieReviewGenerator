@@ -21,23 +21,18 @@ ___author__ = 'Sravana Reddy'
 __date__ = 'Sep 2014'
 __version__ = '1'
 
+#tag texts.txt files for each product ID with part-of-speeches
 def annotate_pos(rootdir):
-    f = open('../pos_tagged_movies.txt', 'w+')
     for subdir, dirs, files in os.walk(rootdir):
         for file in files:
             pathName = os.path.join(subdir, file)
+            #for each texts.txt file in the data directory, call the stanford-part-of-speech tagger program
+            #to annotate texts.txt with part-of-speeches, and store the annotations in a pos.txt file
             if pathName.endswith('texts.txt'):
-                #print pathName
-                print os.path.join(subdir, 'pos.txt')
-                f.write(os.path.join(subdir, 'pos.txt'))
-                f.write('\n')
-                if not os.path.exists(os.path.join(subdir, 'pos.txt')) and not os.path.exists(os.path.join(subdir, 'pos.txt')):
-                	subprocess.call(['./stanford-postagger.sh', './models/english-bidirectional-distsim.tagger', pathName], stdout=open(os.path.join(subdir, 'pos.txt'), 'w'))
-                else:
-                    if os.path.exists(os.path.join(subdir, 'pos.txt')):
-                        print 'hehe ' + os.path.join(subdir, 'pos.txt')
-    f.close()
+                if not os.path.exists(os.path.join(subdir, 'pos.txt')):
+                    subprocess.call(['./stanford-postagger.sh', './models/english-bidirectional-distsim.tagger', pathName], stdout=open(os.path.join(subdir, 'pos.txt'), 'w'))
+    
 
+#NOTE: must be in the stanford-postagger-2014-10-26 folder to call this program
 if __name__=='__main__':   #main function
-    #wordcounts = count_words('./movies.txt')   #filename is first parameter
     annotate_pos('../data')
